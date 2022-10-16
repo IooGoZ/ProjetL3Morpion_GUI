@@ -36,10 +36,6 @@ scene.add(planeMesh);
 const grid = new THREE.GridHelper(size, size);
 scene.add(grid);	
 
-
-
-
-
 //  FONCTIONS
 
 function animate() {
@@ -56,21 +52,6 @@ function animate() {
 	renderer.render( scene, camera );
 }
 
-
-
-//  On suppose (pour l'instant) que tous les obj sont des IcosahedronGeometry
-// function placeObject( obj, color){
-
-//     const geometry = new THREE.obj( 1, 1 );
-//     const material = new THREE.MeshBasicMaterial( { color: color } );
-//     const geometryType = new THREE.Mesh( geometry, material );
-//     scene.add( geometryType );
-
-//     const edges = new THREE.EdgesGeometry( geometry );
-//     const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
-//     scene.add( line );
-// }
-
 function placeInvisibleCube( x, y, z ){
 
     const geometry = new THREE.BoxGeometry( size, size, size );
@@ -82,10 +63,26 @@ function placeInvisibleCube( x, y, z ){
 
     const edges = new THREE.EdgesGeometry( geometry );
     const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial());
-    scene.add( line );
+    scene.add( line );  
 
     boxgeometry.position.set( x, y, z );
     line.position.set( x, y, z );
+
+}
+
+function placeObject( x, y, z, color){
+
+    const geometry = new THREE.IcosahedronGeometry( 1, 1 );
+    const material = new THREE.MeshBasicMaterial( { color: color } );
+    const icosahedron = new THREE.Mesh( geometry, material );
+
+    scene.add( icosahedron );
+    icosahedron.position.set( x*size/2 , y*size/2 , z*size/2 );
+
+    const edges = new THREE.EdgesGeometry( geometry );
+    const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
+    scene.add( line );
+    line.position.set( x*size/2 , y*size/2 , z*size/2 );
 
 }
 
@@ -113,8 +110,11 @@ const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color
 scene.add( line );
 line.position.set(0,0,1);
 
+placeObject(1,1,1, 0xff0000);
+
 //  LANCEMENT
 
 animate();
 
 initMap( 2, 2, 2 );
+
