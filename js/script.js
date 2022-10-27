@@ -27,7 +27,7 @@ function init(){
     initHighlightCube();
     initMap( 5, 5, 5 );
 
-   placeObject( 1, 2, 1, 0xff0000 );
+   placeObject( 0, 0, 0, 0xff0000 );
 
     mousePosition = new THREE.Vector2();
     raycaster = new THREE.Raycaster();
@@ -77,9 +77,9 @@ function onMouseMove( event ) {
         if(intersect.object.isLineSegments){
             
             //console.log(intersect);
-            const highlightPos = new THREE.Vector3().copy(intersect.point).min(MAX_VECTOR).floor();
+            const highlightPos = new THREE.Vector3().copy(intersect.point).min(MAX_VECTOR).floor().addScalar( 0.5, 0.5, 0.5 );
             //console.log(highlightPos);
-            highlightCube.position.set( highlightPos.x + 0.5, highlightPos.y + 0.5, highlightPos.z + 0.5 );
+            highlightCube.position.set( highlightPos.x, highlightPos.y, highlightPos.z );
 
         }
      })
@@ -124,8 +124,8 @@ function placeInvisibleCube( x, y, z ){
     const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial());
     scene.add( line );  
 
-    boxgeometry.position.set( x + 0.5 , y + 0.5, z + 0.5 );
-    line.position.set( x + 0.5, y + 0.5, z + 0.5 );
+    boxgeometry.position.set( x, y, z).addScalar( 0.5, 0.5, 0.5);;
+    line.position.set( x, y, z).addScalar( 0.5, 0.5, 0.5);
 
 }
 
@@ -140,12 +140,12 @@ function placeObject( x, y, z, color){
     const icosahedron = new THREE.Mesh( geometry, material );
     
     scene.add( icosahedron );
-    icosahedron.position.set( x - 0.5 , y - 0.5 , z - 0.5 );
+    icosahedron.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5);
 
     const edges = new THREE.EdgesGeometry( geometry );
     const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
     scene.add( line );
-    line.position.set( x - 0.5 , y - 0.5 , z - 0.5 );
+    line.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5);;
 
     icosahedronsAndLines.push(icosahedron);
     icosahedronsAndLines.push(line);
