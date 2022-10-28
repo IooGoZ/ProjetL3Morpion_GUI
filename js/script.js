@@ -10,7 +10,7 @@ const near = 1.0;
 const far = 1000;
 const rotationSpeed = 0.00002;
 var MAX_X, MAX_Y, MAX_Z;
-var MAX_VECTOR;
+var MAX_VECTOR, MIN_VECTOR;
 
 var camera, scene, renderer, controls, raycaster, mousePosition, intersects, highlightCube;
 var icosahedronsAndLines = [];
@@ -25,9 +25,9 @@ function init(){
     scene = new THREE.Scene();
 
     initHighlightCube();
-    initMap( 5, 5, 5 );
+    initMap( 3, 3, 3 );
 
-   placeObject( 0, 0, 0, 0xff0000 );
+    placeObject( 0, 0, 0, 0xff0000 );
 
     mousePosition = new THREE.Vector2();
     raycaster = new THREE.Raycaster();
@@ -38,8 +38,8 @@ function init(){
 
     controls = new OrbitControls(camera, renderer.domElement);
 
-    document.addEventListener( 'mousemove', onMouseMove );
-
+    document.body.addEventListener( 'mousedown', onMouseDown );
+    window.addEventListener( 'mousemove', onMouseMove );
     window.addEventListener( 'resize', onWindowResize );
 
 }
@@ -47,10 +47,13 @@ function init(){
 function initHighlightCube() {
     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
     const material = new THREE.MeshBasicMaterial( {
-         side : THREE.DoubleSide
+         side : THREE.DoubleSide,
+         transparent : true,
+         opacity : 0.3
          } );
     highlightCube = new THREE.Mesh( geometry, material );
     scene.add( highlightCube );
+    console.log(highlightCube);
 
     highlightCube.position.set( 0.5 , 0.5, 0.5 );
 
@@ -73,17 +76,40 @@ function onMouseMove( event ) {
     intersects = raycaster.intersectObjects(scene.children);
     
     intersects.forEach( function(intersect) {
-        console.log(intersects);
-        if(intersect.object.isLineSegments){
+        //console.log(intersects);
+        if(intersect.object.geometry.type === 'BoxGeometry'){
             
             //console.log(intersect);
-            const highlightPos = new THREE.Vector3().copy(intersect.point).min(MAX_VECTOR).floor().addScalar( 0.5, 0.5, 0.5 );
+            const highlightPos = new THREE.Vector3().copy(intersect.point).max(MIN_VECTOR).min(MAX_VECTOR).floor();
             //console.log(highlightPos);
-            highlightCube.position.set( highlightPos.x, highlightPos.y, highlightPos.z );
+            highlightCube.position.set( highlightPos.x, highlightPos.y, highlightPos.z ).addScalar( 0.5, 0.5, 0.5 );
 
         }
      })
 
+}
+
+const icoMesh = new THREE.Mesh( 
+    new THREE.IcosahedronGeometry( 1, 1 ).scale( 0.35, 0.35, 0.35 ),
+    new THREE.MeshBasicMaterial( { 
+        color: 0xff0000
+     } )
+)
+
+function onMouseDown() {
+    console.log("yo");
+    intersects.forEach( function(intersect) {
+
+        if(intersect.object.geometry.type === 'BoxGeometry'){
+            const icoClone =  icoMesh.clone();
+            sphereClone.position.copy(highlightCube.position);
+            scene.add(sphereClone);
+        }
+
+        
+     })
+
+     console.log(icosahedronsAndLines.length);
 }
 
 function animate() {
@@ -166,6 +192,7 @@ function initMap( length, width, depth ){
     MAX_Z = depth-1;
 
     MAX_VECTOR = new THREE.Vector3( MAX_X, MAX_Y, MAX_Z );
+    MIN_VECTOR = new THREE.Vector3( 0, 0, 0 );
 
     camera.position.set( -width/2, length/2, -depth/2 );
     camera.rotation.set( 0, 0, 1 );
