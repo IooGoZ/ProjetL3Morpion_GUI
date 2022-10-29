@@ -38,7 +38,7 @@ function init(){
 
     controls = new OrbitControls(camera, renderer.domElement);
 
-    document.body.addEventListener( 'mousedown', onMouseDown );
+    renderer.domElement.addEventListener( 'click', onMouseDown );
     window.addEventListener( 'mousemove', onMouseMove );
     window.addEventListener( 'resize', onWindowResize );
 
@@ -55,7 +55,7 @@ function initHighlightCube() {
     scene.add( highlightCube );
     console.log(highlightCube);
 
-    highlightCube.position.set( 0.5 , 0.5, 0.5 );
+    highlightCube.position.addScalar( 0.5 , 0.5, 0.5 );
 
 }
 
@@ -76,40 +76,56 @@ function onMouseMove( event ) {
     intersects = raycaster.intersectObjects(scene.children);
     
     intersects.forEach( function(intersect) {
-        //console.log(intersects);
-        if(intersect.object.geometry.type === 'BoxGeometry'){
-            
-            //console.log(intersect);
+        if(intersect.object.geometry.type === 'BoxGeometry')
+        {
             const highlightPos = new THREE.Vector3().copy(intersect.point).max(MIN_VECTOR).min(MAX_VECTOR).floor();
-            //console.log(highlightPos);
             highlightCube.position.set( highlightPos.x, highlightPos.y, highlightPos.z ).addScalar( 0.5, 0.5, 0.5 );
 
+            const objectExist = icosahedronsAndLines.find( function(object){
+                if(object.geometry.type === "IcosahedronGeometry")
+                {
+                   return ((object.position.x === highlightCube.position.x) && 
+                       (object.position.y === highlightCube.position.y) &&
+                       (object.position.z === highlightCube.position.z))
+                }
+           } )
+       
+           if(!objectExist)
+           {
+                highlightCube.material.opacity = 0.3;
+           }
+           else
+           {
+                highlightCube.material.opacity = 0;
+           }
         }
      })
+
 
 }
 
-const icoMesh = new THREE.Mesh( 
-    new THREE.IcosahedronGeometry( 1, 1 ).scale( 0.35, 0.35, 0.35 ),
-    new THREE.MeshBasicMaterial( { 
-        color: 0xff0000
-     } )
-)
-
 function onMouseDown() {
-    console.log("yo");
-    intersects.forEach( function(intersect) {
+    
+    const objectExist = icosahedronsAndLines.find( function(object){
+         if(object.geometry.type === "IcosahedronGeometry")
+         {
+            return ((object.position.x === highlightCube.position.x) && 
+                (object.position.y === highlightCube.position.y) &&
+                (object.position.z === highlightCube.position.z))
+         }
+    } )
 
-        if(intersect.object.geometry.type === 'BoxGeometry'){
-            const icoClone =  icoMesh.clone();
-            sphereClone.position.copy(highlightCube.position);
-            scene.add(sphereClone);
-        }
-
-        
-     })
-
-     console.log(icosahedronsAndLines.length);
+    if(!objectExist)
+    {
+        intersects.forEach( function(intersect) {
+            if(intersect.object.geometry.type === 'BoxGeometry')
+            {
+                placeObject( highlightCube.position.x - 0.5, highlightCube.position.y - 0.5, highlightCube.position.z - 0.5, 0xff0000 );
+                highlightCube.material.opacity = 0;
+            }
+         })
+    }
+    console.log(scene.children.length);
 }
 
 function animate() {
@@ -150,12 +166,12 @@ function placeInvisibleCube( x, y, z ){
     const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial());
     scene.add( line );  
 
-    boxgeometry.position.set( x, y, z).addScalar( 0.5, 0.5, 0.5);;
-    line.position.set( x, y, z).addScalar( 0.5, 0.5, 0.5);
+    boxgeometry.position.set( x, y, z).addScalar( 0.5, 0.5, 0.5 );;
+    line.position.set( x, y, z).addScalar( 0.5, 0.5, 0.5 );
 
 }
 
-function placeObject( x, y, z, color){
+function placeObject( x, y, z, color ){
 
     const geometry = new THREE.IcosahedronGeometry( 1, 1 );
     geometry.scale( 0.35, 0.35, 0.35 );
@@ -166,12 +182,12 @@ function placeObject( x, y, z, color){
     const icosahedron = new THREE.Mesh( geometry, material );
     
     scene.add( icosahedron );
-    icosahedron.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5);
+    icosahedron.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5 );
 
     const edges = new THREE.EdgesGeometry( geometry );
     const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
     scene.add( line );
-    line.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5);;
+    line.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5 );;
 
     icosahedronsAndLines.push(icosahedron);
     icosahedronsAndLines.push(line);
