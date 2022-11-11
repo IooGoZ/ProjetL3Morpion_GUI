@@ -98,24 +98,39 @@ export function parserShowBoard(msg)
     const msgs = splitString(msg, SPLIT_CHAR);
     // On verifie si le message a la bonne taille
     let length = msgs.length;
-    if (length % 3 != 0)
+    if (length < 2)
     {
-        console.log("ERROR in parserShowBoard : msgs.length is not a multiple of 3, it is egal to " + length);
+        console.log("ERROR in parserShowBoard : msgs.length is too small to be a correct message");
         return;
     }
     else
     {
         // On recupere les valeurs
-        var posList = [];
-        for (let i = 0 ; i < length ; i+3)
-        {
-            var position = {
-                x : msgs[i+0],
-                y : msgs[i+1],
-                z : msgs[i+2]
-            }
-            posList[i/3] = position;
-        }
+		var playersId = [];
+        var posList = [][];
+		var playerIdNb = 0;
+		var i = 0;
+		var j = 0;
+		while (msgs[i] != "%")
+		{
+			playersId[playerIdNb] = parseInt(msg[i]);
+			playerIdNb++;
+			i++;
+			
+			while (msgs[i] != "£")
+			{
+				var position = {
+                x : parseInt(msgs[i+0]),
+                y : parseInt(msgs[i+1]),
+                z : parseInt(msgs[i+2])
+				}
+				
+				i += 3;
+				j += 3;				
+				posList[playerIdNb][j/3] = position;
+			}
+			i++;
+		}
         
         // On appelle la fonction avec les valeurs recuperes
         //showBoard(posList);                 A FINIR
@@ -129,22 +144,24 @@ export function parserPlayerPos(msg)
     const msgs = splitString(msg, SPLIT_CHAR);
     // On verifie si le message a la bonne taille
     let length = msgs.length;
-    if (length != 3)
+    if (length != 4)
     {
-        console.log("ERROR in parserShowBoard : msgs.length is not equal to 3, it is egal to " + length);
+        console.log("ERROR in parserShowBoard : msgs.length is not equal to 4, it is egal to " + length);
         return;
     }
     else
     {
         // On recupere les valeurs
+		var playerId = msgs[0]
+		
         var position = {
-            x : msgs[0],
-            y : msgs[1],
-            z : msgs[2]
+            x : msgs[1],
+            y : msgs[2],
+            z : msgs[3]
         }
         
         // On appelle la fonction avec les valeurs recuperes
-        //playerPos(position);                 A FINIR
+        //playerPos(playerId, position);                 A FINIR
     }
 }
 
@@ -249,12 +266,12 @@ export function unparserPauseResume(paused) { // paused : bool
 }
 
 // Parse pour afficher l'action courante
-export function unparserDisplayAction(position) { // position {x, y, z}
+export function unparserDisplayAction(playerId, position) { // position {x, y, z}
     //On definit l'id
     var id = 4;
 
     //On redige le "message"
-    var msg = position.x + SPLIT_CHAR + position.y + SPLIT_CHAR + position.z; 
+    var msg = playerId + SPLIT_CHAR + position.x + SPLIT_CHAR + position.y + SPLIT_CHAR + position.z; 
 
     // On envoie au parseMaker
     parseMake(id, msg);
