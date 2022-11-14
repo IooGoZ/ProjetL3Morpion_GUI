@@ -20,11 +20,16 @@ var icosahedronsAndLines = [];
 var playerIds = [0x0000ff, 0xff0000];
 var nextObjectPos;
 
+var parser;
 
-initBoardLength(2, 2, 2);
-animate();
+export function defineParser(master) {
+    parser = master;
+}
 
-function initBoardLength(width, height, depth){
+//initBoardLength(2, 2, 2);
+//
+
+export function initBoardLength(width, height, depth){
 
     camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 
@@ -33,8 +38,8 @@ function initBoardLength(width, height, depth){
     initHighlightCube();
     initMap( width, height, depth);
 
-    var myPos = {x : 0, y : 0, z : 0};
-    playerPos(10, myPos);
+    //var myPos = {x : 0, y : 0, z : 0};
+    //playerPos(10, myPos);
 
     mousePosition = new THREE.Vector2();
     raycaster = new THREE.Raycaster();
@@ -49,7 +54,7 @@ function initBoardLength(width, height, depth){
     renderer.domElement.addEventListener( 'click', onMouseDown );
     window.addEventListener( 'mousemove', onMouseMove );
     window.addEventListener( 'resize', onWindowResize );
-
+    animate();
 }
 
 function getColor(playerId){
@@ -60,7 +65,7 @@ function getColor(playerId){
     }
 }
 
-function playerPos(playerId, position){
+export function playerPos(playerId, position){
     placeObject(position.x, position.y, position.z, getColor(playerId));
 }
 
@@ -151,7 +156,8 @@ function onMouseDown() {
             {
                 nextObjectPos = {x : highlightCube.position.x - 0.5, y : highlightCube.position.y - 0.5, z : highlightCube.position.z - 0.5}
                 console.log(nextObjectPos);
-                placeObject( nextObjectPos.x, nextObjectPos.y, nextObjectPos.z, 0xff0000 );
+                parser.unparserDisplayAction(1, nextObjectPos);
+                new Promise(r => setTimeout(r, 100));
                 highlightCube.material.opacity = 0;
             }
          })
@@ -208,7 +214,7 @@ function placeObject( x, y, z, color ){
     geometry.scale( 0.35, 0.35, 0.35 );
     const material = new THREE.MeshBasicMaterial( { 
         color: color,
-//        wireframe : true
+        wireframe : true
      } );
     const icosahedron = new THREE.Mesh( geometry, material );
     
@@ -216,7 +222,7 @@ function placeObject( x, y, z, color ){
     icosahedron.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5 );
 
     const edges = new THREE.EdgesGeometry( geometry );
-    const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
+    const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: color } ) );
     scene.add( line );
     line.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5 );;
 
@@ -233,8 +239,6 @@ function initMap( length, width, depth ){
             }
         }
     }
-
-    //scene.add(Tom_TEST.three_dimensions_grid(length, width, depth)); 
 
 
     MAX_X = width-1;
