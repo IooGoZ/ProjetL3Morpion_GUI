@@ -74,8 +74,10 @@ function onWindowResize() {
 
 function onMouseMove( event ) {
 
-    mousePosition.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mousePosition.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    let rect = renderer.domElement.getBoundingClientRect();
+
+    mousePosition.x = ( (event.clientX-rect.x) / (window.innerWidth*WIDTH_RATIO)) * 2 - 1;
+    mousePosition.y = - ( (event.clientY-rect.y) / (window.innerHeight*HEIGHT_RATIO)) * 2 + 1;
     raycaster.setFromCamera(mousePosition, camera);
     intersects = raycaster.intersectObjects(scene.children);
     
