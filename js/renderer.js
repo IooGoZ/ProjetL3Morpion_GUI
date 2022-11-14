@@ -17,20 +17,24 @@ var MAX_VECTOR, MIN_VECTOR;
 
 var camera, scene, renderer, controls, raycaster, mousePosition, intersects, highlightCube;
 var icosahedronsAndLines = [];
+var playerIds = [0x0000ff, 0xff0000];
+var nextObjectPos;
 
-init();
+
+initBoardLength(2, 2, 2);
 animate();
 
-function init(){
+function initBoardLength(width, height, depth){
 
     camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 
     scene = new THREE.Scene();
 
     initHighlightCube();
-    initMap( 3, 3, 3);
+    initMap( width, height, depth);
 
-    placeObject( 0, 0, 0, 0xff0000 );
+    var myPos = {x : 0, y : 0, z : 0};
+    playerPos(10, myPos);
 
     mousePosition = new THREE.Vector2();
     raycaster = new THREE.Raycaster();
@@ -47,6 +51,26 @@ function init(){
     window.addEventListener( 'resize', onWindowResize );
 
 }
+
+function getColor(playerId){
+    switch (playerId) {
+        case 1 :  return playerIds[0];
+        case 2 :  return playerIds[1];
+        default : return 0x000000;
+    }
+}
+
+function playerPos(playerId, position){
+    placeObject(position.x, position.y, position.z, getColor(playerId));
+}
+
+// function displayAction(playerId, position){
+//     var position = {
+//         x : ,
+//         y : ,
+//         z : 
+//     }
+// }
 
 function initHighlightCube() {
     const geometry = new THREE.BoxGeometry( 1, 1, 1 );
@@ -125,7 +149,9 @@ function onMouseDown() {
         intersects.forEach( function(intersect) {
             if(intersect.object.geometry.type === 'BoxGeometry')
             {
-                placeObject( highlightCube.position.x - 0.5, highlightCube.position.y - 0.5, highlightCube.position.z - 0.5, 0xff0000 );
+                nextObjectPos = {x : highlightCube.position.x - 0.5, y : highlightCube.position.y - 0.5, z : highlightCube.position.z - 0.5}
+                console.log(nextObjectPos);
+                placeObject( nextObjectPos.x, nextObjectPos.y, nextObjectPos.z, 0xff0000 );
                 highlightCube.material.opacity = 0;
             }
          })
