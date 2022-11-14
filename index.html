@@ -4,12 +4,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="styles/gstyle.css" rel="stylesheet" type="text/css">
     <title>GUI - Projet L3 Morpion</title>
     <style>
         body { margin: 0; } 
     </style>
 </head>
 <body>
-    <script src="js/script.js" type="module"></script>
+    <div id="forms_view">
+        <h1>Actions :</h1>
+        <from name="create_game">
+            <h4>Create game :</h4>
+            <input type="number" placeholder="width" id="create_game_width"/><br/>
+            <input type="number" placeholder="height" id="create_game_height"/><br/>
+            <input type="number" placeholder="depth" id="create_game_depth"/><br/>
+            <button id="create_game_button">Create game !</button>
+        </from>
+        <from name="run_game">
+            <h4>Run game :</h4>
+            <button id="run_game_button">Run game !</button>
+        </from>
+        <from name="set_delay">
+            <h4>Set Delay :</h4>
+            <input type="number" placeholder="delay" id="set_delay_value"/><br/>
+            <button id="set_delay_button">Set delay !</button>
+        </from>
+        <br/><br/>
+        <div id="console"></div>
+    </div>
+    <script src="js/renderer.js" type="module"></script>
+    <script src="js/linker.js" type="module"></script>
 </body>
 </html>

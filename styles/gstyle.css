@@ -1,0 +1,12 @@
+#three_dimensions_viewport {
+    position: absolute;
+    right: 0px;
+}
+
+#forms_view {
+    position: absolute;
+    left: 0px;
+    height: 100%;
+    padding-left: 10px;
+    overflow: hidden;
+}

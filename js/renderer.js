@@ -4,8 +4,11 @@
 import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js';
 
+const WIDTH_RATIO = 0.8;
+const HEIGHT_RATIO = 1.0;
+
 const fov = 80;
-const aspect = window.innerWidth / window.innerHeight; // i.e : 1920/1080
+const aspect = window.innerWidth*WIDTH_RATIO / window.innerHeight*HEIGHT_RATIO; // i.e : 1920/1080
 const near = 1.0;
 const far = 1000;
 const rotationSpeed = 0.00002;
@@ -33,11 +36,12 @@ function init(){
     raycaster = new THREE.Raycaster();
 
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth*WIDTH_RATIO, window.innerHeight*HEIGHT_RATIO );
     document.body.appendChild( renderer.domElement );
 
     controls = new OrbitControls(camera, renderer.domElement);
 
+    renderer.domElement.id = "three_dimensions_viewport";
     renderer.domElement.addEventListener( 'click', onMouseDown );
     window.addEventListener( 'mousemove', onMouseMove );
     window.addEventListener( 'resize', onWindowResize );
