@@ -106,8 +106,8 @@ export function parserShowBoard(msg)
     else
     {
         // On recupere les valeurs
-		var playersId = [];
-        var posList = [][];
+		var playersId;
+        var posList;
 		var playerIdNb = 0;
 		var i = 0;
 		var j = 0;

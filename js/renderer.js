@@ -3,7 +3,6 @@
 
 import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js';
-import * as Tom_TEST from  '/test.js'
 
 const WIDTH_RATIO = 0.8;
 const HEIGHT_RATIO = 1.0;
@@ -29,7 +28,7 @@ function init(){
     scene = new THREE.Scene();
 
     initHighlightCube();
-    initMap( 30, 30, 30 );
+    initMap( 3, 3, 3);
 
     placeObject( 0, 0, 0, 0xff0000 );
 
