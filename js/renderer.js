@@ -135,9 +135,9 @@ function onMouseDown() {
             if(intersect.object.geometry.type === 'BoxGeometry')
             {
                 nextObjectPos = {x : highlightCube.position.x - 0.5, y : highlightCube.position.y - 0.5, z : highlightCube.position.z - 0.5};
-                parser.unparserDisplayAction(default_human_id, nextObjectPos);
             }
          })
+         parser.unparserDisplayAction(default_human_id, nextObjectPos);
     }
 }
 
