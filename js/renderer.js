@@ -22,8 +22,13 @@ var icosahedronsAndLines = [];
 var playerIds = [0x0000ff, 0xff0000, 0x00ff00, 0xffff00, 0x00ffff, 0xff00ff];
 var nextObjectPos;
 const default_human_id = 1;
+var parser;
 
-function initBoardLength(width, height, depth){
+export function defineParser(master) {
+    parser = master;
+}
+
+export function initBoardLength(width, height, depth){
 
     camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 
@@ -31,7 +36,6 @@ function initBoardLength(width, height, depth){
 
     initHighlightCube();
     initMap( width, height, depth);
-
 
     mousePosition = new THREE.Vector2();
     raycaster = new THREE.Raycaster();
@@ -46,7 +50,6 @@ function initBoardLength(width, height, depth){
     renderer.domElement.addEventListener( 'click', onMouseDown );
     window.addEventListener( 'mousemove', onMouseMove );
     window.addEventListener( 'resize', onWindowResize );
-
     animate();
 }
 
@@ -54,7 +57,7 @@ function getColor(playerId){
     return playerIds[playerId-1];
 }
 
-function playerPos(playerId, position){
+export function playerPos(playerId, position){
     placeObject(position.x, position.y, position.z, getColor(playerId));
 }
 
@@ -190,7 +193,7 @@ function placeObject( x, y, z, color ){
     geometry.scale( 0.35, 0.35, 0.35 );
     const material = new THREE.MeshBasicMaterial( { 
         color: color,
-//        wireframe : true
+        wireframe : true
      } );
     const icosahedron = new THREE.Mesh( geometry, material );
     
@@ -198,7 +201,7 @@ function placeObject( x, y, z, color ){
     icosahedron.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5 );
 
     const edges = new THREE.EdgesGeometry( geometry );
-    const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0xffffff } ) );
+    const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: color } ) );
     scene.add( line );
     line.position.set( x, y, z ).addScalar( 0.5, 0.5, 0.5 );;
 
@@ -215,7 +218,6 @@ function initMap( length, width, depth ){
             }
         }
     }
-
     MAX_X = width-1;
     MAX_Y = length-1;
     MAX_Z = depth-1;

@@ -1,3 +1,5 @@
+import * as renderer from '/js/renderer.js'
+
 // Caractère de séparation 
 let ID_CHAR = 'µ';
 let SPLIT_CHAR = '¤';
@@ -17,6 +19,7 @@ function wsSend(str) {
 
 export function defineWSServer(server) {
     ws_server = server;
+    renderer.defineParser(this);
 }
 
 // #### DE MESSAGE PARSEES A VALEURS ####
@@ -25,7 +28,7 @@ export function defineWSServer(server) {
 export function parserMaster(info)
 {
     // On recupere chaque partie du message separes par le symbole SPLIT_CHAR
-    const infos = splitString(infos, ID_CHAR);
+    const infos = info.split(ID_CHAR);
 
     let length = infos.length;
     if (length != 2)
@@ -36,28 +39,28 @@ export function parserMaster(info)
     else
     {
         // On recupere la valeur
-        let id = parseInt(infos[0]);
+        let id = infos[0];
         // On recupere le message
         let msg = infos[1];
 
         switch (id)
         {
-            case '0' : 
+            case "0" : 
                 parserInitBoardLengths(msg);
                 break;
-			case '1' : 
+			case "1" : 
                 parserShowBoard(msg);
                 break;
-			case '2' : 
+			case "2" : 
                 parserPlayerPos(msg);
                 break;
-			case '3' : 
+			case "3" : 
                 parserShowWinner(msg);
                 break;
-			case '4' : 
+			case "4" : 
                 parserPauseResume(msg);
                 break;
-			case '5' : 
+			case "5" : 
                 parserException(msg);
                 break;
             default :
@@ -67,10 +70,10 @@ export function parserMaster(info)
 }
 
 // Parser pour la taille de plateau (void)
-export function parserInitBoardLengths(msg)
+function parserInitBoardLengths(msg)
 {
     // On recupere chaque partie du message separes par le symbole SPLIT_CHAR
-    const msgs = splitString(msg, SPLIT_CHAR);
+    const msgs = msg.split(SPLIT_CHAR);
     // On verifie si le message a la bonne taille
     let length = msgs.length;
     if (length != 3)
@@ -86,16 +89,16 @@ export function parserInitBoardLengths(msg)
         let depth = parseInt(msgs[2]);
         
         // On appelle la fonction avec les valeurs recuperes
-        //initBoardLengths(width, height, depth);                 A FINIR
+        renderer.initBoardLength(width, height, depth);
     }
 }
 
 
 // Parser pour les positions du plateau (void)
-export function parserShowBoard(msg)
+function parserShowBoard(msg)
 {
     // On recupere chaque partie du message separes par le symbole SPLIT_CHAR
-    const msgs = splitString(msg, SPLIT_CHAR);
+    const msgs = msg.split(SPLIT_CHAR);
     // On verifie si le message a la bonne taille
     let length = msgs.length;
     if (length < 2)
@@ -138,10 +141,10 @@ export function parserShowBoard(msg)
 }
 
 // Parser pour la position du joueur (void)
-export function parserPlayerPos(msg)
+function parserPlayerPos(msg)
 {
     // On recupere chaque partie du message separes par le symbole SPLIT_CHAR
-    const msgs = splitString(msg, SPLIT_CHAR);
+    const msgs = msg.split(SPLIT_CHAR);
     // On verifie si le message a la bonne taille
     let length = msgs.length;
     if (length != 4)
@@ -152,28 +155,28 @@ export function parserPlayerPos(msg)
     else
     {
         // On recupere les valeurs
-		var playerId = msgs[0]
+		var playerId = parseInt(msgs[0]);
 		
         var position = {
-            x : msgs[1],
-            y : msgs[2],
-            z : msgs[3]
+            x : parseInt(msgs[1]),
+            y : parseInt(msgs[2]),
+            z : parseInt(msgs[3])
         }
         
         // On appelle la fonction avec les valeurs recuperes
-        //playerPos(playerId, position);                 A FINIR
+        renderer.playerPos(playerId, position);
     }
 }
 
 // Parser pour montrer le gagnant (void)
-export function parserShowWinner(msg)
+function parserShowWinner(msg)
 {   
     // On appelle la fonction avec la valeur
     //showWinner(msg);                 A FINIR
 }
 
 // Parser pour mettre sur pause (void)
-export function parserPauseResume(msg)
+function parserPauseResume(msg)
 {   
 	let b = parseInt(msg); 
 	switch (b)
@@ -190,7 +193,7 @@ export function parserPauseResume(msg)
 }
 
 // Parser pour montrer une exception (void)
-export function parserException(msg)
+function parserException(msg)
 {   
     // On appelle la fonction avec la valeur
     //exception(msg);                 A FINIR
@@ -200,7 +203,7 @@ export function parserException(msg)
 
 // Permet "d'empaqueter" un message avec son id et son contenu puis l'envoyer
 // C'est comme un envoi a la poste : le timbre (id) et la lettre (msg)
-export function parseMake(id, msg) 
+function parseMake(id, msg) 
 {
 	// On prepare le paquet
     msg = id + ID_CHAR + msg;
@@ -243,7 +246,7 @@ export function unparserRunGame() {
     var id = 2;
 
     // On envoie au parseMaker
-    parseMake(id, " ");
+    parseMake(id, "0");
 }
 
 // Parse pour mettre en jeu ou reprendre la partie
