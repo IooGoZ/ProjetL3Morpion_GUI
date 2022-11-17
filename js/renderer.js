@@ -3,7 +3,7 @@
 
 import * as THREE from 'https://unpkg.com/three@0.126.1/build/three.module.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js';
-import * as parser from "./parser.js";
+import * as unparser from '/js/unparser.js';
 
 const WIDTH_RATIO = 0.8;
 const HEIGHT_RATIO = 1.0;
@@ -22,10 +22,9 @@ var icosahedronsAndLines = [];
 var playerIds = [0x0000ff, 0xff0000, 0x00ff00, 0xffff00, 0x00ffff, 0xff00ff];
 var nextObjectPos;
 const default_human_id = 1;
-var parser;
 
-export function defineParser(master) {
-    parser = master;
+export function getUnparser() {
+    return unparser;
 }
 
 export function initBoardLength(width, height, depth){
@@ -48,8 +47,8 @@ export function initBoardLength(width, height, depth){
 
     renderer.domElement.id = "three_dimensions_viewport";
     renderer.domElement.addEventListener( 'click', onMouseDown );
-    window.addEventListener( 'mousemove', onMouseMove );
-    window.addEventListener( 'resize', onWindowResize );
+    renderer.domElement.addEventListener( 'mousemove', onMouseMove );
+    renderer.domElement.addEventListener( 'resize', onWindowResize );
     animate();
 }
 
@@ -77,10 +76,10 @@ function initHighlightCube() {
 
 function onWindowResize() {
 
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.innerWidth*WIDTH_RATIO / window.innerHeight*HEIGHT_RATIO ;
     camera.updateProjectionMatrix();
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth*WIDTH_RATIO, window.innerHeight*HEIGHT_RATIO  );
 
 }
 
@@ -140,7 +139,7 @@ function onMouseDown() {
                 nextObjectPos = {x : highlightCube.position.x - 0.5, y : highlightCube.position.y - 0.5, z : highlightCube.position.z - 0.5};
             }
          })
-         parser.unparserDisplayAction(default_human_id, nextObjectPos);
+         unparser.unparserDisplayAction(default_human_id, nextObjectPos);
     }
 }
 

@@ -40,12 +40,6 @@ function setDelay() {
 let socket = new WebSocket("ws://localhost:80");
 parser.defineWSServer(socket);
 initListener();
-
-//WS SEND------------------------------------
-function wsSend(str) {
-    divlog("[send] " + str);
-    socket.send(str);
-}
 //WS EVENT-----------------------------------
 socket.onopen = function(e) {
     divlog("[open] Connection established");
