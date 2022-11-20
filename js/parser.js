@@ -58,6 +58,9 @@ export function parserMaster(info)
 			case "5" : 
                 parserException(msg);
                 break;
+            case "6" :
+                parserRequestHuman(msg);
+                break;
             default :
                 console.log("ERROR in parserMaster : the ID doesn't correspond to any command");
         }
@@ -192,8 +195,14 @@ function parserPauseResume(msg)
 function parserException(msg)
 {   
     // On appelle la fonction avec la valeur
-    //exception(msg);                 A FINIR
+    exception("Erreur : " + msg);
 }
+
+function parserRequestHuman(msg) {
+    let id = parseInt(msg);
+    renderer.setHumanId(id);
+}
+
 
 // #### DE VALEURS A MESSAGE PARSEES ####
 

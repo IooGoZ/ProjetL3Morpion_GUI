@@ -21,7 +21,9 @@ var camera, scene, renderer, controls, raycaster, mousePosition, intersects, hig
 var icosahedronsAndLines = [];
 var playerIds = [0x0000ff, 0xff0000, 0x00ff00, 0xffff00, 0x00ffff, 0xff00ff];
 var nextObjectPos;
-const default_human_id = 1;
+
+
+let human_id;
 
 export function getUnparser() {
     return unparser;
@@ -139,7 +141,7 @@ function onMouseDown() {
                 nextObjectPos = {x : highlightCube.position.x - 0.5, y : highlightCube.position.y - 0.5, z : highlightCube.position.z - 0.5};
             }
          })
-         unparser.unparserDisplayAction(default_human_id, nextObjectPos);
+         unparser.unparserDisplayAction(human_id, nextObjectPos);
     }
 }
 
@@ -228,5 +230,6 @@ function initMap( length, width, depth ){
     camera.rotation.set( 0, 0, 0 );
 }
 
-
-
+export function setHumanId(id) {
+    human_id = id;
+}

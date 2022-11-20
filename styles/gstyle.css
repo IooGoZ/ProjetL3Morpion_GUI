@@ -10,3 +10,8 @@
     padding-left: 10px;
     overflow: hidden;
 }
+
+#console {
+    overflow: auto;
+    height: 400px;
+}

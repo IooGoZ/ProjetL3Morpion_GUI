@@ -43,11 +43,10 @@ initListener();
 //WS EVENT-----------------------------------
 socket.onopen = function(e) {
     divlog("[open] Connection established");
-    divlog("Sending to server");
 };
 
 socket.onmessage = function(event) {
-    divlog(`[message] Data received from server: ${event.data}`);
+    divlog("[message] " + event.data);
     parser.parserMaster(event.data);
 };
 
