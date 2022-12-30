@@ -87,7 +87,7 @@ function parserInitBoardLengths(msg)
         let depth = parseInt(msgs[2]);
         
         // On appelle la fonction avec les valeurs recuperes
-        renderer.initBoardLength(width, height, depth);
+        renderer.init(width, height, depth);
     }
 }
 
