@@ -85,7 +85,7 @@ function initBoardLength(width, height, depth){
     MAX_VECTOR = new THREE.Vector3( MAX_X, MAX_Y, MAX_Z );
     MIN_VECTOR = new THREE.Vector3( 0, 0, 0 );
 
-    camera.position.set( 0, 0,  coeffCamera*(width+height));
+    camera.position.set(width*100, 0,  65*width);
 }
 
 function placeInvisibleSquare(x, y){
@@ -106,7 +106,7 @@ function initHighlightSquare(){
     const material = new THREE.MeshBasicMaterial( {
          side : THREE.DoubleSide,
          transparent : true,
-         opacity : 0.3
+         opacity : 0.8
          } );
     highlightSquare = new THREE.Mesh( geometry, material );
     scene.add( highlightSquare );
@@ -136,7 +136,7 @@ function createAndPlaceLine(x1, y1, z1, x2, y2, z2){
     const material = new THREE.LineBasicMaterial({
         color : 0xffffff,
         transparent : true,
-        opacity : 0.1
+        opacity : 0.5
     });
     const points = [];
 
