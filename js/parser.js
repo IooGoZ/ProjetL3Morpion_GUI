@@ -87,7 +87,7 @@ function parserInitBoardLengths(msg)
         let depth = parseInt(msgs[2]);
         
         // On appelle la fonction avec les valeurs recuperes
-        renderer.initBoardLength(width, height, depth);
+        renderer.init(width, height, depth);
     }
 }
 
@@ -206,8 +206,8 @@ function parserRequestHuman(msg) {
 
 // #### DE VALEURS A MESSAGE PARSEES ####
 
-export function unparserCreateNewGame(width, height, depth) {
-    renderer.getUnparser().unparserCreateNewGame(width, height, depth);
+export function unparserCreateNewGame(width, height, depth, player_list) {
+    renderer.getUnparser().unparserCreateNewGame(width, height, depth, player_list);
 }
 
 export function unparserSetDelay(delay) {
