@@ -206,8 +206,8 @@ function parserRequestHuman(msg) {
 
 // #### DE VALEURS A MESSAGE PARSEES ####
 
-export function unparserCreateNewGame(width, height, depth) {
-    renderer.getUnparser().unparserCreateNewGame(width, height, depth);
+export function unparserCreateNewGame(width, height, depth, player_list) {
+    renderer.getUnparser().unparserCreateNewGame(width, height, depth, player_list);
 }
 
 export function unparserSetDelay(delay) {

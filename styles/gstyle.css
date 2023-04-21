@@ -13,5 +13,69 @@
 
 #console {
     overflow: auto;
-    height: 400px;
+    height: 200px;
+    line-height: normal;
 }
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    color: white;
+    font: italic small-caps bold 14px/0.9 cursive;
+    line-height: 0;
+}
+
+html {
+    background: radial-gradient(ellipse at center, #424242 0%, #000000 100%);
+    width: 100%;
+    height: 100%;
+}
+
+input, select, button {
+    background: #000000;
+    color: #cacaca;
+    border: 1px solid #cacaca;
+    border-radius: 5px;
+    font: italic small-caps bold 12px/0.9 cursive;
+    padding: 5px;
+    margin: 5px;
+    transition: all 0.4s ease;
+}
+
+button {
+    cursor: pointer;
+}
+
+input:hover, select:hover, button:hover {
+    background: #202020;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+
+}
+
+
+#a_console {
+    position: absolute;
+    bottom: 10px;
+    left: 0px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+h4 {
+    font-size: 20px;
+}
+
+h5 {
+    font-size: 16px;
+}
+
+label {
+    font-size: 14px;
+}
+
+
+
+
+

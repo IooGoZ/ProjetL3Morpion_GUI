@@ -30,13 +30,18 @@ function parseMake(id, msg)
 	wsSend(msg);
 }
 // Parse les dimensions du plateau pour creer une nouvelle partie
-export function unparserCreateNewGame(width, height, depth) // tous int
+export function unparserCreateNewGame(width, height, depth, player_list) // tous int
 {
     //On definit l'id
     var id = 0;
 
     //On redige le "message" : les 3 valeurs separes par le separateur
-    var msg = width + SPLIT_CHAR + height + SPLIT_CHAR + depth;
+    var msg = width + SPLIT_CHAR + height + SPLIT_CHAR + depth + SPLIT_CHAR;
+
+    for (var i = 0; i < player_list.length-1; i++) {
+        msg += player_list[i] + SPLIT_CHAR;
+    }
+    msg += player_list[player_list.length-1];
 
     // On envoie au parseMaker
     parseMake(id, msg);

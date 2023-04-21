@@ -44,7 +44,7 @@ export function init(width, height, depth){
 
     mousePosition = new THREE.Vector2();
     raycaster = new THREE.Raycaster();
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({ alpha: true });
 
     renderer.setSize( window.innerWidth*WIDTH_RATIO, window.innerHeight*HEIGHT_RATIO );
     document.body.appendChild( renderer.domElement );
@@ -85,7 +85,11 @@ function initBoardLength(width, height, depth){
     MAX_VECTOR = new THREE.Vector3( MAX_X, MAX_Y, MAX_Z );
     MIN_VECTOR = new THREE.Vector3( 0, 0, 0 );
 
-    camera.position.set(width*100, 0,  65*width);
+    if (is2D) {
+        camera.translateZ( 100*width );
+    } else {
+        camera.translateZ( 3*depth );
+    }
 }
 
 function placeInvisibleSquare(x, y){
@@ -112,6 +116,8 @@ function initHighlightSquare(){
     scene.add( highlightSquare );
 
     highlightSquare.position.set( offset, offset, 0 );
+
+    
 }
 
 function init2DMap(width, height){
@@ -203,7 +209,7 @@ function onMouseMove( event ) {
 
     mousePosition.x = ( (event.clientX-rect.x) / (window.innerWidth*WIDTH_RATIO)) * 2 - 1;
     mousePosition.y = - ( (event.clientY-rect.y) / (window.innerHeight*HEIGHT_RATIO)) * 2 + 1;
-    raycaster.setFromCamera(mousePosition, camera);
+    //raycaster.setFromCamera(mousePosition, camera);
     intersects = raycaster.intersectObjects(scene.children);
     
     intersects.forEach( function(intersect) {
@@ -220,6 +226,7 @@ function onMouseMove( event ) {
                     }
                 } )
             
+                
                 if(!objectExist)
                 {
                         highlightSquare.material.opacity = 0.3;
@@ -308,6 +315,9 @@ function animate() {
 }
 
 function render() {
+    controls.target.x = MAX_X/2;
+    controls.target.y = MAX_Y/2;
+    controls.target.z = MAX_Z/2;
     renderer.render( scene, camera );
 }
 
